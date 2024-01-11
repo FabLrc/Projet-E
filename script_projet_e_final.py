@@ -43,6 +43,8 @@ def update_script():
                 file.write(response.text)
             print("Le script a été mis à jour. Veuillez le relancer.")
             os._exit(0)
+        else:
+            print("Le script est à jour.")
     else:
         print("Impossible de vérifier la mise à jour.")
 
