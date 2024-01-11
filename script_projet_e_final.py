@@ -30,7 +30,7 @@ console_handler.setFormatter(logging.Formatter(log_format))
 logger.addHandler(console_handler)
 
 def update_script():
-    url = "https://github.com/FabLrc/Projet-E/blob/main/script_projet_e_final.py"
+    url = "https://raw.githubusercontent.com/FabLrc/Projet-E/main/script_projet_e_final.py"
     response = requests.get(url)
     
     if response.status_code == 200:
