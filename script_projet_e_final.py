@@ -34,11 +34,12 @@ def update_script():
     response = requests.get(url)
     
     if response.status_code == 200:
-        with open(__file__, 'r') as file:
-            current_script = file.read()
+        current_script_path = os.path.realpath(__file__)
+        with open(current_script_path, 'r', encoding='utf-8') as file:
+            current_script = file.read().replace('\r\n', '\n')
         
-        if current_script != response.text:
-            with open(__file__, 'w') as file:
+        if current_script != response.text.replace('\r\n', '\n'):
+            with open(current_script_path, 'w', encoding='utf-8') as file:
                 file.write(response.text)
             print("Le script a été mis à jour. Veuillez le relancer.")
             os._exit(0)
