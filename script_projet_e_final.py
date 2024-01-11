@@ -41,12 +41,12 @@ def update_script():
         if current_script != response.text.replace('\r\n', '\n'):
             with open(current_script_path, 'w', encoding='utf-8') as file:
                 file.write(response.text)
-            print("Le script a été mis à jour. Veuillez le relancer.")
+            logging.info("Le script a été mis à jour. Veuillez le relancer.")
             os._exit(0)
         else:
-            print("Le script est à jour.")
+            logging.info("Le script est à jour.")
     else:
-        print("Impossible de vérifier la mise à jour.")
+        logging.error("Impossible de vérifier la mise à jour.")
 
 if __name__ == "__main__":
     update_script()
