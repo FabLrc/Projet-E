@@ -11,6 +11,19 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, WebDriverException, StaleElementReferenceException
 from logging.handlers import RotatingFileHandler
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
+# Configuration des logs Chrome
+
+chrome_service = Service(ChromeDriverManager().install())
+os.environ['WDM_LOG_LEVEL'] = '0'  # Réduit le niveau de journalisation du WebDriver Manager
+chrome_options = Options()
+chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+chrome_options.add_argument('--log-level=3')  # Réduit la journalisation de Chrome
+chrome_options.add_argument('--enable-logging --v=1 --log-path=chrome.log')  # Spécifie le fichier de log
+
+driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
 
 # Configuration de la journalisation pour écrire à la fois dans un fichier et sur la console
 log_format = "%(asctime)s - %(levelname)s - %(message)s"
