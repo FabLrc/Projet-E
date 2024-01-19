@@ -13,6 +13,8 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException,
 from logging.handlers import RotatingFileHandler
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
+
 
 # Configuration des logs Chrome
 
@@ -61,8 +63,9 @@ def update_script():
     else:
         logging.error("Impossible de vérifier la mise à jour.")
 
-if __name__ == "__main__":
-    update_script()
+    if __name__ == "__main__":
+        update_script()
+
 
 # Lecture de la configuration
 try:
