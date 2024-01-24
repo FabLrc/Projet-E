@@ -173,7 +173,7 @@ def accept_new_projects(driver):
             logging.error(f"Erreur lors du retour à la liste des projets : {type(e_inner).__name__}, {e_inner}")
 
 def main():
-    update_script
+    update_script()
     driver = initialize_driver()
     try:
         login(driver, username, password)
