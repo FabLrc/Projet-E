@@ -99,7 +99,14 @@ except Exception as e:
 # Fonctions modulaires
 def initialize_driver():
     try:
-        driver = webdriver.Chrome()
+        chrome_service = Service(ChromeDriverManager().install())
+        os.environ['WDM_LOG_LEVEL'] = '0'  # Réduit le niveau de journalisation du WebDriver Manager
+        chrome_options = Options()
+        chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        chrome_options.add_argument('--log-level=3')  # Réduit la journalisation de Chrome
+        chrome_options.add_argument('--enable-logging --v=1 --log-path=chrome.log')  # Spécifie le fichier de log
+
+        driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
         logging.info("Navigateur ouvert avec succès.")
         return driver
     except WebDriverException as e:
