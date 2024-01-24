@@ -68,20 +68,21 @@ def update_script():
     if response.status_code == 200:
         current_script_path = os.path.realpath(__file__)
         with open(current_script_path, 'r', encoding='utf-8') as file:
-            current_script = file.read().replace('\r\n', '\n')
+            current_script = file.read()
         
-        if current_script != response.text.replace('\r\n', '\n'):
+        # Normaliser les fins de ligne
+        normalized_current_script = current_script.replace('\r\n', '\n')
+        normalized_response_text = response.text.replace('\r\n', '\n')
+
+        if normalized_current_script != normalized_response_text:
             with open(current_script_path, 'w', encoding='utf-8') as file:
-                file.write(response.text)
+                file.write(normalized_response_text)
             logging.info("Le script a été mis à jour. Veuillez le relancer.")
             os._exit(0)
         else:
             logging.info("Le script est à jour.")
     else:
         logging.error("Impossible de vérifier la mise à jour.")
-
-    if __name__ == "__main__":
-        update_script()
 
 
 # Lecture de la configuration
