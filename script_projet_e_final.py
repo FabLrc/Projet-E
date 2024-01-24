@@ -147,11 +147,26 @@ def accept_new_projects(driver):
                         except TimeoutException:
                             # Pas de message d'erreur, on continue
                             pass
+                        # Récupérer informations client
+                        client_info_div = driver.find_element(By.CLASS_NAME, "engie-bloc.text-center.mt-30")
+                        spans = client_info_div.find_elements(By.TAG_NAME, "span")
+                        nom_prenom_client = spans[0].text if len(spans) > 0 else "Non disponible"
+                        numero_tel_client = spans[1].text if len(spans) > 1 else "Non disponible"
 
+                        description_projet = ""
+                        try:
+                            description_projet = driver.find_element(By.XPATH, "//strong[contains(text(), 'Description du projet :')]/following-sibling::li").text
+                        except NoSuchElementException:
+                            description_projet = "Description non disponible"
+
+                        
                         # Cliquer sur le bouton Accepter si disponible
                         try :
                             WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[contains(., 'Accepter')]"))).click()
                             logging.info("Nouveau projet accepté.")
+                            logging.info(f"Nom et prénom du client : {nom_prenom_client}")
+                            logging.info(f"Numéro de téléphone du client : {numero_tel_client}")
+                            logging.info(f"Description du projet : {description_projet}")
                             driver.get(site_url)
                             WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.TAG_NAME, "tr")))
                             break
