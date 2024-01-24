@@ -30,18 +30,38 @@ driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
 # Configuration de la journalisation pour écrire à la fois dans un fichier et sur la console
 log_format = "%(asctime)s - %(levelname)s - %(message)s"
 
-# Création d'un logger
+class CustomFormatter(logging.Formatter):
+    """Formateur de log personnalisé avec surlignage des mots INFO et ERROR pour la console"""
+
+    GREEN = "\033[42m"
+    RED = "\033[41m"
+    RESET = "\033[0m"
+    FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
+
+    def format(self, record):
+        level = record.levelname
+        if level == 'INFO':
+            levelname_color = self.GREEN + level + self.RESET
+        elif level == 'ERROR':
+            levelname_color = self.RED + level + self.RESET
+        else:
+            levelname_color = level
+
+        formatter = logging.Formatter(self.FORMAT.replace('%(levelname)s', levelname_color), datefmt="%Y-%m-%d %H:%M:%S")
+        return formatter.format(record)
+
+# Configuration du logger
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 # Handler pour écrire dans le fichier log
 file_handler = RotatingFileHandler('engie_automation.log', maxBytes=1000000, backupCount=5)
-file_handler.setFormatter(logging.Formatter(log_format))
+file_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
 logger.addHandler(file_handler)
 
-# Handler pour écrire sur la console
+# Handler pour écrire sur la console avec le formateur personnalisé
 console_handler = logging.StreamHandler(sys.stdout)
-console_handler.setFormatter(logging.Formatter(log_format))
+console_handler.setFormatter(CustomFormatter())
 logger.addHandler(console_handler)
 
 def update_script():
