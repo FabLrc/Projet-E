@@ -167,7 +167,7 @@ def accept_new_projects(driver):
 
                             description_projet = ""
                             try:
-                                description_projet = driver.find_element(By.XPATH, "//strong[contains(text(), 'Description du projet :')]/following-sibling::li").text
+                                description_projet = driver.find_element(By.XPATH, "//strong[contains(text(), 'Description du projet :')]/following-sibling::br/following-sibling::text()[1]").get_attribute("textContent")
                             except NoSuchElementException:
                                 description_projet = "Description non disponible"
                             logging.info(f"Nom et prénom du client : {nom_prenom_client}")
