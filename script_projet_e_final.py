@@ -154,34 +154,35 @@ def accept_new_projects(driver):
                         except TimeoutException:
                             # Pas de message d'erreur, on continue
                             pass
-                                                
+
                         # Cliquer sur le bouton Accepter si disponible
-                        try :
+                        try:
                             WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[contains(., 'Accepter')]"))).click()
-                            logging.info("Nouveau projet accepté.")
+
                             # Récupérer informations client
                             client_info_div = driver.find_element(By.CLASS_NAME, "engie-bloc.text-center.mt-30")
                             spans = client_info_div.find_elements(By.TAG_NAME, "span")
                             nom_prenom_client = spans[0].text if len(spans) > 0 else "Non disponible"
                             numero_tel_client = spans[1].text if len(spans) > 1 else "Non disponible"
 
-                            description_projet = ""
-                            try:
-                                description_projet = driver.find_element(By.XPATH, "//strong[contains(text(), 'Description du projet :')]/following-sibling::br/following-sibling::text()[1]").get_attribute("textContent")
-                            except NoSuchElementException:
-                                description_projet = "Description non disponible"
-                            logging.info(f"Nom et prénom du client : {nom_prenom_client}")
-                            logging.info(f"Numéro de téléphone du client : {numero_tel_client}")
-                            logging.info(f"Description du projet : {description_projet}")
+                            # Récupérer la description du projet
+                            element_parent_li = driver.find_element(By.XPATH, "//strong[contains(text(), 'Description du projet :')]/ancestor::li")
+                            texte_complet = element_parent_li.get_attribute("textContent")
+                            partie_importante = texte_complet.split("Description du projet :")[-1].strip()
+
+                            # Enregistrer les informations dans les logs
+                            logging.info(f"Nouveau projet accepté : {nom_prenom_client}, {numero_tel_client}")
+                            logging.info(f"Description du projet : {partie_importante}")
+
                             driver.get(site_url)
                             WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.TAG_NAME, "tr")))
                             break
                         except TimeoutException:
                             logging.error("L'élément n'a pas été trouvé dans le délai imparti. Retour à l'accueil.")
                             driver.get(site_url)
-                            logging.info("Raffraichissement du driver.")
+                            logging.info("Rafraîchissement du driver.")
                             driver.refresh()
-                            # Gestion supplémentaire (par exemple, rafraîchir la page ou passer à une autre action)
+                            # Gestion supplémentaire
             else:
                 break
     except Exception as e:
@@ -193,6 +194,7 @@ def accept_new_projects(driver):
             logging.info("Retour à la liste des projets après l'erreur.")
         except Exception as e_inner:
             logging.error(f"Erreur lors du retour à la liste des projets : {type(e_inner).__name__}, {e_inner}")
+
 
 def main():
     update_script()
