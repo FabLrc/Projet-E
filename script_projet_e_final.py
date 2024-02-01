@@ -207,7 +207,7 @@ def main():
             if 9 <= current_time.hour < 20:
                 accept_new_projects(driver)
 
-                next_check_time = current_time.replace(second=0, microsecond=0, minute=2) + timedelta(hours=1)
+                next_check_time = current_time.replace(second=0, microsecond=0, minute=1) + timedelta(hours=1)
                 time_until_next_check = (next_check_time - current_time).total_seconds()
                 logging.info(f"Aucun nouveau projet trouvé. Prochaine vérification à {next_check_time.strftime('%H:%M:%S')}.")
                 time.sleep(time_until_next_check)
