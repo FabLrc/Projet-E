@@ -23,6 +23,7 @@ chrome_options = Options()
 chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
 chrome_options.add_argument('--log-level=3')  # Réduit la journalisation de Chrome
 chrome_options.add_argument('--enable-logging --v=1 --log-path=chrome.log')  # Spécifie le fichier de log
+chrome_options.add_argument("--headless")
 
 # Configuration de la journalisation pour écrire à la fois dans un fichier et sur la console
 log_format = "%(asctime)s - %(levelname)s - %(message)s"
